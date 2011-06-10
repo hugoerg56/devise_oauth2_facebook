@@ -33,7 +33,8 @@ class Devise::FacebookConsumerController < ApplicationController
   
   
   def callback2
-    puts "*Paso* "*10
+    puts "*"*100
+    puts "Creando Person..."
     
     url = send("#{resource_name}_fb_callback2_url".to_sym)
     
