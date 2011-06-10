@@ -37,6 +37,12 @@ module Devise
           user.do_update_facebook_user(fb_user, token)
           user
         end
+        
+        def create_person_fulldata(fb_user, token)
+          puts "*"*100
+          puts fb_user.inspect
+          "a"
+        end
       end
       
     end

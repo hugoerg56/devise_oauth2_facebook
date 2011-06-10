@@ -32,9 +32,21 @@ class Devise::FacebookConsumerController < ApplicationController
   end
   
   
-  def callback2
+  def callback
     puts "*Paso* "*10
-    redirect_to '/'
+    
+    url = send("#{resource_name}_fb_callback2_url".to_sym)
+    
+    client = facebook_client
+
+    client.authorization.process_callback(params[:code], :redirect_uri => url)
+
+    token = client.access_token
+    fb_user = client.selection.me.info!
+    
+    resource = resource_class.create_person_fulldata(fb_user, token)
+    
+    redirect_to '/thanks'
   end
 
 end
