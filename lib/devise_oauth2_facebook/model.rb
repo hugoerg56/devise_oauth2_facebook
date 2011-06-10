@@ -43,11 +43,12 @@ module Devise
           puts fb_user
           
           
-          person = Person.last(:conditions => {:email => fb_user.email.downcase})    
+          person = Person.last(:conditions => {:email => fb_user.email.downcase})  
+          puts person  
           if !person.nil?
             person = People.create!( :email => fb_user.email.downcase, :nombre => fb_user.name, :telefono => "0", :opportunities => {:estado => 'lead', :colores => '0', :precio_total => '0', :cantidad => '0', :facebook => fb_user.link, :notas => 'Creado con data de facebook!'})
             person.save
-            puts "Preson creado correctamente!"
+            puts "Person creado correctamente!"
           else
             puts "Ya existe un usuario con este correo registrado!"
           end
