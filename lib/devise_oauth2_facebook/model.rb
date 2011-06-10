@@ -33,7 +33,7 @@ module Devise
         end
         puts "*"*100
         puts fb_user.email
-        puts fb_user. 
+
         
         def create_with_facebook_user(fb_user, token)
           user = User.create!(:facebook_uid_field =>  fb_user["id"], :email => fb_user.email.downcase, :password => "fakepass", :password_confirmation => "fakepass")
