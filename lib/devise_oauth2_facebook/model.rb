@@ -47,7 +47,7 @@ module Devise
             puts "Ya existe un usuario con este correo registrado!"
           rescue
             person_f = Person.create!( :email => fb_user.email.downcase, :nombre => fb_user.name, :telefono => "0")
-            person_f.opportunities[0] = [:estado => 'lead', :colores => '0', :precio_total => '0', :cantidad => '0', :facebook => 'http://www.facebook.com/'+fb_user.username, :notas => 'Creado con data de facebook!']
+            person_f.opportunities = [:estado => 'lead', :colores => '0', :precio_total => '0', :cantidad => '0', :facebook => 'http://www.facebook.com/'+fb_user.username, :notas => 'Creado con data de facebook!']
             person_f.save
             puts "Person creado correctamente!"      
           end
