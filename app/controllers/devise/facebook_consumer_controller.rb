@@ -23,7 +23,16 @@ class Devise::FacebookConsumerController < ApplicationController
     unless resource
       resource = resource_class.create_with_facebook_user(fb_user, token)
     end
-    puts resource.inspect
+
+    if resource_class.respond_to?(:serialize_into_cookie)
+      resource.remember_me!
+      cookies.signed["remember_#{resource_name}_token"] = {
+        :value => resource.class.serialize_into_cookie(resource),
+        :expires => resource.remember_expires_at,
+        :path => "/"
+      }
+    end
+    
     set_flash_message :notice, :signed_in
     sign_in_and_redirect(:user, resource)
 

@@ -31,10 +31,12 @@ module Devise
                user
           end
         end
- 
+        puts "*"*100
+        puts fb_user.email
+        puts fb_user. 
         
         def create_with_facebook_user(fb_user, token)
-          user = User.create!( :facebook_uid_field => fb_user["id"], :email => fb_user.email.downcase, :password => "fakepass", :password_confirmation => "fakepass")
+          user = User.create!(:facebook_uid_field =>  fb_user["id"], :email => fb_user.email.downcase, :password => "fakepass", :password_confirmation => "fakepass")
           user.skip_confirmation! if user.respond_to?(:skip_confirmation!)
           user.do_update_facebook_user(fb_user, token)
           user
