@@ -19,11 +19,9 @@ class Devise::FacebookConsumerController < ApplicationController
     fb_user = client.selection.me.info!
  
     resource = resource_class.find_with_facebook_user(fb_user, token)
-    puts "1*"*100
     puts resource.inspect
     
     set_flash_message :notice, :signed_in
-    puts "2*"*100
     sign_in_and_redirect(:user, resource)
 
   end
