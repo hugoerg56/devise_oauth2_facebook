@@ -4,12 +4,6 @@ require 'fbgraph'
 require 'devise_oauth2_facebook/engine'
 
 module Devise
-  mattr_accessor :facebook_uid_field
-  @@facebook_uid_field = :facebook_uid
-
-  mattr_accessor :facebook_token_field
-  @@facebook_token_field = :facebook_token
-
   mattr_accessor :facebook_api_key
   @@facebook_api_key = nil
 

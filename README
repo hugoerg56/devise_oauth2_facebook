@@ -29,10 +29,5 @@ $ config/initializers/devise.rb
 
 Good minimum to have is "offline_access,email"
 
-Create a migration file to add the columns:
-
-  add_column :users, :facebook_uid, :string
-  add_column :users, :facebook_token, :string
-
 Finally, update your view to include "Login with facebook" link:
   <%= link_to "Login with facebook", user_fb_auth_path %>
