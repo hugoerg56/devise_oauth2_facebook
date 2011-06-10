@@ -20,9 +20,6 @@ class Devise::FacebookConsumerController < ApplicationController
     fb_user = client.selection.me.info!
  
     resource = resource_class.find_with_facebook_user(fb_user, token)
-    unless resource
-      resource = resource_class.create_with_facebook_user(fb_user, token)
-    end
 
     set_flash_message :notice, :signed_in
     sign_in_and_redirect(:user, resource)
