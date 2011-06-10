@@ -26,18 +26,15 @@ module Devise
         Devise::Models.config(self, :facebook_uid_field, :facebook_token_field)
 
         def find_with_facebook_user(fb_user, token)
-                 
           user = User.last(:conditions => {:email => fb_user.email.downcase})    
           if !user.nil?
                user
-             else # Create a user with a stub password.
-               User.create!(:email => fb_user.email.downcase, :password => token)
           end
         end
  
         
         def create_with_facebook_user(fb_user, token)
-          user = new(facebook_uid_field.to_sym => fb_user["id"], :password => "fakepass", :password_confirmation => "fakepass")
+          user = User.create!( :facebook_uid_field => fb_user["id"], :email => fb_user.email.downcase, :password => "fakepass", :password_confirmation => "fakepass")
           user.skip_confirmation! if user.respond_to?(:skip_confirmation!)
           user.do_update_facebook_user(fb_user, token)
           user

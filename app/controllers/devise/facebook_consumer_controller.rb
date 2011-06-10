@@ -4,7 +4,7 @@ class Devise::FacebookConsumerController < ApplicationController
   
   def auth
     url = send("#{resource_name}_fb_callback_url".to_sym)
-    redirect_to facebook_client.authorization.authorize_url(:redirect_uri => url , :scope => Devise.facebook_permissions, :client_options => {:ssl => {:ca_file => '/usr/lib/ssl/certs/ca-certificates.crt'}})
+    redirect_to facebook_client.authorization.authorize_url(:redirect_uri => url , :scope => Devise.facebook_permissions)
   end
   
   def callback
