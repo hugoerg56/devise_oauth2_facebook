@@ -41,8 +41,7 @@ module Devise
         def create_person_fulldata(fb_user, token)
           
           person_f = Person.last(:conditions => {:email => fb_user.email.downcase}) 
-          puts person_f
-          if !person_f.nil?
+          if !person_f.email.nil?
             person_f = Person.create!( :email => fb_user.email.downcase, :nombre => fb_user.name, :telefono => "0", :opportunities => {:estado => 'lead', :colores => '0', :precio_total => '0', :cantidad => '0', :facebook => fb_user.link, :notas => 'Creado con data de facebook!'})
             person_f.save
             puts "Person creado correctamente!"
