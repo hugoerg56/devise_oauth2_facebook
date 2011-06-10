@@ -7,6 +7,11 @@ class Devise::FacebookConsumerController < ApplicationController
     redirect_to facebook_client.authorization.authorize_url(:redirect_uri => url , :scope => Devise.facebook_permissions)
   end
   
+  def auth2
+    url = send("#{resource_name}_fb_callback2_url".to_sym)
+    redirect_to facebook_client.authorization.authorize_url(:redirect_uri => url , :scope => Devise.facebook_permissions)
+  end
+  
   def callback
 
     url = send("#{resource_name}_fb_callback_url".to_sym)
@@ -24,6 +29,12 @@ class Devise::FacebookConsumerController < ApplicationController
     set_flash_message :notice, :signed_in
     sign_in_and_redirect(:user, resource)
 
+  end
+  
+  
+  def callback2
+    puts "*Paso* "*10
+    redirect_to '/'
   end
 
 end
