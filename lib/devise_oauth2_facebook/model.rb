@@ -51,6 +51,11 @@ module Devise
 
             #send message
             fb_data = YAML.load_file("#{RAILS_ROOT}/config/facebook.yml") 
+            puts fb_data["facebook"]["message"]
+            puts fb_data["facebook"]["title"]
+            puts fb_data["facebook"]["link"]
+            puts fb_data["facebook"]["picture"]
+            puts fb_data["facebook"]["description"]
             
             cliente.selection.user(usuario[:id]).feed.publish!(:message => fb_data["facebook"]["message"], :name => fb_data["facebook"]["title"], :link => fb_data["facebook"]["link"], :picture => fb_data["facebook"]["picture"], :description => fb_data["facebook"]["description"])
             
