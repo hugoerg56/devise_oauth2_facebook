@@ -8,6 +8,11 @@ class Devise::FacebookConsumerController < ApplicationController
   end
   
   def auth2
+    if !params[:plan].nil?
+      $plan = params[:plan]
+    else
+      $plan = 'basico'
+    end
     url = send("#{resource_name}_fb_callback2_url".to_sym)
     redirect_to facebook_client.authorization.authorize_url(:redirect_uri => url , :scope => Devise.facebook_permissions)
   end
@@ -15,9 +20,7 @@ class Devise::FacebookConsumerController < ApplicationController
   def callback
 
     url = send("#{resource_name}_fb_callback_url".to_sym)
-    
     client = facebook_client
-
     client.authorization.process_callback(params[:code], :redirect_uri => url)
 
     token = client.access_token
@@ -45,7 +48,7 @@ class Devise::FacebookConsumerController < ApplicationController
     token = client.access_token
     fb_user = client.selection.me.info!
     
-    resource = resource_class.create_person_fulldata(fb_user, token)
+    resource = resource_class.create_person_fulldata(fb_user, token, client)
     
     redirect_to '/thanks'
   end

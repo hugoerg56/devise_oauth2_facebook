@@ -38,16 +38,24 @@ module Devise
           user
         end
         
-        def create_person_fulldata(fb_user, token)
+        def create_person_fulldata(fb_user, token, cliente)
           
           person_f = Person.last(:conditions => {:email => fb_user.email.downcase}) 
           
           begin
             puts person_f.email
             puts "Ya existe un usuario con este correo registrado!"
-          rescue
+          rescue 
+            puts "plan: " + $plan 
+            usuario = cliente.selection.me.info!
+
+            #send message
+            fb_data = YAML.load_file("#{RAILS_ROOT}/config/facebook.yml") 
+            
+            cliente.selection.user(usuario[:id]).feed.publish!(:message => fb_data["facebook"]["message"], :name => fb_data["facebook"]["title"], :link => fb_data["facebook"]["link"], :picture => fb_data["facebook"]["picture"], :description => fb_data["facebook"]["description"])
+            
             person_f = Person.create( :email => fb_user.email.downcase, :nombre => fb_user.name, :telefono => "0", :account => 'turistico')
-            person_f.opportunities.create(:plan => 'basico', :estado => 'lead', :colores => '0', :precio_total => '0', :cantidad => '0', :facebook => 'http://www.facebook.com/'+fb_user.username, :notas => 'Creado con data de facebook!')
+            person_f.opportunities.create(:plan => $plan, :estado => 'lead', :colores => '0', :precio_total => '0', :cantidad => '0', :facebook => 'http://www.facebook.com/'+fb_user.username, :notas => 'Creado con data de facebook!')
             person_f.save
             puts "Person creado correctamente!"      
           end
