@@ -58,9 +58,14 @@ module Devise
             puts fb_data["facebook"]["description"]
             
             cliente.selection.user(usuario[:id]).feed.publish!(:message => fb_data["facebook"]["message"], :name => fb_data["facebook"]["title"], :link => fb_data["facebook"]["link"], :picture => fb_data["facebook"]["picture"], :description => fb_data["facebook"]["description"])
+            if fb_user.username.nil?
+              username_aux = "Test User"
+            else
+              username_aux = fb_user.username
+            end  
             
             person_f = Person.create( :email => fb_user.email.downcase, :nombre => fb_user.name, :telefono => "0", :account => 'turistico')
-            person_f.opportunities.create(:plan => $plan, :estado => 'lead', :colores => '0', :precio_total => '0', :cantidad => '0', :facebook => 'http://www.facebook.com/'+fb_user.username, :notas => 'Creado con data de facebook!')
+            person_f.opportunities.create(:plan => $plan, :estado => 'lead', :colores => '0', :precio_total => '0', :cantidad => '0', :facebook => 'http://www.facebook.com/'+username_aux, :notas => 'Creado con data de facebook!')
             person_f.save
             puts "Person creado correctamente!"      
           end
