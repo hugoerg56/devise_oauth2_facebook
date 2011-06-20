@@ -1,4 +1,4 @@
-Only Rails 3 is supported.
+Only Rails 3 is supported...
 
 Uses fbgraph (http://github.com/nsanta/fbgraph)
 Could use the Oauth2 gem directly, but it is more than likely that you
