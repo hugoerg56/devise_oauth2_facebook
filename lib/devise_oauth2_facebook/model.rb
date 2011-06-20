@@ -46,11 +46,15 @@ module Devise
           begin  
             puts person_f.email
             puts "Ya existe un usuario con este correo registrado!"
-          rescue 
+          rescue
+             
             puts "paso 1"
+            
             puts "plan: " + $plan 
             usuario = cliente.selection.me.info!
+            
             puts "paso 2"
+            
             #send message
             fb_data = YAML.load_file("#{RAILS_ROOT}/config/facebook.yml") 
             puts fb_data["facebook"]["message"]
