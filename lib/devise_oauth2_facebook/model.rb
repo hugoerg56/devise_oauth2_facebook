@@ -50,7 +50,7 @@ module Devise
             puts "paso 1"
             puts "plan: " + $plan 
             usuario = cliente.selection.me.info!
-            outs "paso 2"
+            puts "paso 2"
             #send message
             fb_data = YAML.load_file("#{RAILS_ROOT}/config/facebook.yml") 
             puts fb_data["facebook"]["message"]
