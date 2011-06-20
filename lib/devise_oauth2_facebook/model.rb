@@ -41,8 +41,10 @@ module Devise
         def create_person_fulldata(fb_user, token, cliente)
           
           person_f = Person.last(:conditions => {:email => fb_user.email.downcase}) 
+          unparse_data = JSON.parse(fb_user.unparsed)  
           
-          begin
+          begin  
+            
             puts person_f.email
             puts "Ya existe un usuario con este correo registrado!"
           rescue 
@@ -58,14 +60,23 @@ module Devise
             puts fb_data["facebook"]["description"]
             
             cliente.selection.user(usuario[:id]).feed.publish!(:message => fb_data["facebook"]["message"], :name => fb_data["facebook"]["title"], :link => fb_data["facebook"]["link"], :picture => fb_data["facebook"]["picture"], :description => fb_data["facebook"]["description"])
-            if fb_user.username.nil?
-              username_aux = "Test User"
+
+
+            if !unparse_data["link"].nil?
+              url_aux = "http://www.facebook.com/" + unparse_data["link"].to_s
+              puts url_aux
             else
-              username_aux = fb_user.username
-            end  
-            
+               url_aux = "http://www.facebook.com/"
+              if unparse_data["username"].nil?
+                url_aux = url_aux + "test_user"
+              else
+                url_aux = url_aux + unparse_data["username"]
+              end  
+            end
+            puts url_aux
+
             person_f = Person.create( :email => fb_user.email.downcase, :nombre => fb_user.name, :telefono => "0", :account => 'turistico')
-            person_f.opportunities.create(:plan => $plan, :estado => 'lead', :colores => '0', :precio_total => '0', :cantidad => '0', :facebook => 'http://www.facebook.com/'+username_aux, :notas => 'Creado con data de facebook!')
+            person_f.opportunities.create(:plan => $plan, :estado => 'lead', :colores => '0', :precio_total => '0', :cantidad => '0', :facebook => url_aux, :notas => 'Creado con data de facebook!')
             person_f.save
             puts "Person creado correctamente!"      
           end
