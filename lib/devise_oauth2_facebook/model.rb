@@ -63,7 +63,7 @@ module Devise
 
 
             if !unparse_data["link"].nil?
-              url_aux = "http://www.facebook.com/" + unparse_data["link"].to_s
+              url_aux = unparse_data["link"].to_s
               puts url_aux
             else
                url_aux = "http://www.facebook.com/"
