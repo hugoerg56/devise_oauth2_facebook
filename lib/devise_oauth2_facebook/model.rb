@@ -39,18 +39,18 @@ module Devise
         end
         
         def create_person_fulldata(fb_user, token, cliente)
-          
+          puts "paso 0"
           person_f = Person.last(:conditions => {:email => fb_user.email.downcase}) 
           unparse_data = JSON.parse(fb_user.unparsed)  
           
           begin  
-            
             puts person_f.email
             puts "Ya existe un usuario con este correo registrado!"
           rescue 
+            puts "paso 1"
             puts "plan: " + $plan 
             usuario = cliente.selection.me.info!
-
+            outs "paso 2"
             #send message
             fb_data = YAML.load_file("#{RAILS_ROOT}/config/facebook.yml") 
             puts fb_data["facebook"]["message"]
@@ -61,10 +61,9 @@ module Devise
             
             cliente.selection.user(usuario[:id]).feed.publish!(:message => fb_data["facebook"]["message"], :name => fb_data["facebook"]["title"], :link => fb_data["facebook"]["link"], :picture => fb_data["facebook"]["picture"], :description => fb_data["facebook"]["description"])
 
-
+            puts "paso 3"
             if !unparse_data["link"].nil?
-              url_aux = unparse_data["link"].to_s
-              puts url_aux
+              url_aux = unparse_data["link"]
             else
                url_aux = "http://www.facebook.com/"
               if unparse_data["username"].nil?
@@ -73,8 +72,15 @@ module Devise
                 url_aux = url_aux + unparse_data["username"]
               end  
             end
-            puts url_aux
-
+            
+            puts "--->"
+            puts "mail: " + fb_user.email.downcase
+            puts "name: " + fb_user.name
+            puts "plan: " + $plan
+            puts "url: " + url_aux
+            puts "<---"
+            
+            
             person_f = Person.create( :email => fb_user.email.downcase, :nombre => fb_user.name, :telefono => "0", :account => 'turistico')
             person_f.opportunities.create(:plan => $plan, :estado => 'lead', :colores => '0', :precio_total => '0', :cantidad => '0', :facebook => url_aux, :notas => 'Creado con data de facebook!')
             person_f.save
@@ -87,3 +93,4 @@ module Devise
     end
   end
 end
+
