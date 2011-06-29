@@ -17,6 +17,15 @@ class Devise::FacebookConsumerController < ApplicationController
     redirect_to facebook_client.authorization.authorize_url(:redirect_uri => url , :scope => Devise.facebook_permissions)
   end
   
+  def auth_onboarding
+
+    $redir = params[:redir]
+    $tag = params[:tag]
+    
+    url = send("#{resource_name}_fb_callback_onboarding_url".to_sym)
+    redirect_to facebook_client.authorization.authorize_url(:redirect_uri => url , :scope => Devise.facebook_permissions)
+  end
+  
   def callback
 
     url = send("#{resource_name}_fb_callback_url".to_sym)
@@ -51,6 +60,24 @@ class Devise::FacebookConsumerController < ApplicationController
     resource = resource_class.create_person_fulldata(fb_user, token, client)
     
     redirect_to '/thanks'
+  end
+  
+  def callback_onboarding
+    puts "*"*100
+    puts "Creando Person desde onboarding..."
+    
+    url = send("#{resource_name}_fb_callback_onboarding_url".to_sym)
+    
+    client = facebook_client
+
+    client.authorization.process_callback(params[:code], :redirect_uri => url)
+
+    token = client.access_token
+    fb_user = client.selection.me.info!
+    
+    resource = resource_class.create_person_onboarding(fb_user, token, client)
+    
+    redirect_to 'http://onboarding.esturisti.co/'+$tag+'/thankyou'
   end
 
 end
