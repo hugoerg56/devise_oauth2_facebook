@@ -88,6 +88,27 @@ module Devise
           end
           puts "*"*100
         end
+        
+        def create_person_tucupon(fb_user, token, cliente)
+          person_f = Person.last(:conditions => {:email => fb_user.email.downcase}) 
+          unparse_data = JSON.parse(fb_user.unparsed)  
+          
+          begin  
+            puts person_f.email
+            puts "Ya existe un usuario con este correo registrado!"
+          rescue
+            usuario = cliente.selection.me.info!
+        
+            #cliente.selection.user(usuario[:id]).feed.publish!(:message => fb_data["facebook"]["message"], :name => fb_data["facebook"]["title"], :link => fb_data["facebook"]["link"], :picture => fb_data["facebook"]["picture"], :description => fb_data["facebook"]["description"])
+           
+            person_f = Person.create( :email => fb_user.email.downcase, :nombre => fb_user.name, :telefono => "0", :account => "tucupon-"+$tag)
+            person_f.opportunities.create(:estado => 'lead', :colores => '0', :precio_total => '0', :cantidad => '0', :facebook => unparse_data["link"], :notas => 'Creado con data de facebook dede onboarding!')
+            person_f.save
+            puts "Person creado correctamente!"      
+          end
+          puts "*"*100
+        end
+        
       end
       
     end
