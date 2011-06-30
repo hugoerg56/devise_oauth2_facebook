@@ -91,7 +91,7 @@ class Devise::FacebookConsumerController < ApplicationController
     puts "*"*100
     puts "Creando Person desde tucupon..."
     
-    url = send("#{resource_name}_fb_callback_onboarding_url".to_sym)
+    url = send("#{resource_name}_fb_callback_tucupon_url".to_sym)
     
     client = facebook_client
 
