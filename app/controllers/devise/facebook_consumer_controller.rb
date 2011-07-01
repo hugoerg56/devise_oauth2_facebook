@@ -69,6 +69,7 @@ class Devise::FacebookConsumerController < ApplicationController
   
   
   def callback_onboarding
+    tag = $tag
     puts "*"*100
     puts "Creando Person desde onboarding..."
     
@@ -81,16 +82,18 @@ class Devise::FacebookConsumerController < ApplicationController
     token = client.access_token
     fb_user = client.selection.me.info!
     
-    resource = resource_class.create_person_onboarding(fb_user, token, client)
+    resource = resource_class.create_person_onboarding(tag, fb_user, token, client)
     
-    redirect_to 'http://onboarding.esturisti.co/'+$tag+'/thankyou'
+    redirect_to 'http://onboarding.esturisti.co/'+tag+'/thankyou'
   end
 
 
   def callback_tucupon
+    tag = $tag
+    redir = $redir
+    
     puts "*"*100
     puts "Creando Person desde tucupon..."
-    
     url = send("#{resource_name}_fb_callback_tucupon_url".to_sym)
     
     client = facebook_client
@@ -100,9 +103,9 @@ class Devise::FacebookConsumerController < ApplicationController
     token = client.access_token
     fb_user = client.selection.me.info!
     
-    resource = resource_class.create_person_tucupon(fb_user, token, client)
+    resource = resource_class.create_person_tucupon(tag, fb_user, token, client)
     
-    redirect_to 'http://'+$redir
+    redirect_to 'http://'+redir
   end
 
 end
