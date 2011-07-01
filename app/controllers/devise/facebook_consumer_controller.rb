@@ -25,7 +25,9 @@ class Devise::FacebookConsumerController < ApplicationController
   
   def auth_tucupon
     url = send("#{resource_name}_fb_callback_tucupon_url".to_sym)
-    url = url + "?tag="+params[:tag].to_s+"&redir="+params[:redir].to_s
+    url = url + "?tag=" + params[:tag].to_s + "&rid=" + params[:rid].to_s
+    puts "%%%%%"
+    puts url
     redirect_to facebook_client.authorization.authorize_url(:redirect_uri => url , :scope => Devise.facebook_permissions)
   end
   
@@ -86,12 +88,12 @@ class Devise::FacebookConsumerController < ApplicationController
   def callback_tucupon
     puts "*"*100
     puts "Creando Person desde tucupon..."
-    
-    client = facebook_client
 
     url = send("#{resource_name}_fb_callback_tucupon_url".to_sym)
-    url = url + "?tag="+params[:tag].to_s+"&redir="+params[:redir].to_s
-
+    
+    client = facebook_client
+    url = url + "?tag=" + params[:tag].to_s + "&rid=" + params[:rid].to_s
+    puts url
     client.authorization.process_callback(params[:code], :redirect_uri => url)
 
     token = client.access_token
@@ -99,7 +101,7 @@ class Devise::FacebookConsumerController < ApplicationController
     
     resource = resource_class.create_person_tucupon(params[:tag].to_s, fb_user, token, client)
     
-    redirect_to 'http://'+params[:redir].to_s
+    redirect_to 'http://tucupon.heroku.com/' + params[:tag].to_s + '?id=' + params[:rid].to_s
   end
 
 end
