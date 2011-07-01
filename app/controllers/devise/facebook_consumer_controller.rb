@@ -62,7 +62,7 @@ class Devise::FacebookConsumerController < ApplicationController
     
     resource = resource_class.create_person_fulldata(fb_user, token, client)
     
-    redirect_to '/thanks'
+    redirect_to '/plans'
   end
   
   
