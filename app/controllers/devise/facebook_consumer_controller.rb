@@ -18,18 +18,14 @@ class Devise::FacebookConsumerController < ApplicationController
   end
   
   def auth_onboarding
-    $redir = params[:redir]
-    $tag = params[:tag]
-    
     url = send("#{resource_name}_fb_callback_onboarding_url".to_sym)
+    url = url + "?tag="+params[:tag].to_s
     redirect_to facebook_client.authorization.authorize_url(:redirect_uri => url , :scope => Devise.facebook_permissions)
   end
   
   def auth_tucupon
-    $redir = params[:redir]
-    $tag = params[:tag]
-    
     url = send("#{resource_name}_fb_callback_tucupon_url".to_sym)
+    url = url + "?tag="+params[:tag].to_s+"&redir="+params[:redir].to_s
     redirect_to facebook_client.authorization.authorize_url(:redirect_uri => url , :scope => Devise.facebook_permissions)
   end
   
@@ -69,43 +65,41 @@ class Devise::FacebookConsumerController < ApplicationController
   
   
   def callback_onboarding
-    tag = $tag
     puts "*"*100
     puts "Creando Person desde onboarding..."
     
     url = send("#{resource_name}_fb_callback_onboarding_url".to_sym)
     
     client = facebook_client
-
+    url = url + "?tag="+ params[:tag].to_s
     client.authorization.process_callback(params[:code], :redirect_uri => url)
 
     token = client.access_token
     fb_user = client.selection.me.info!
     
-    resource = resource_class.create_person_onboarding(tag, fb_user, token, client)
+    resource = resource_class.create_person_onboarding(params[:tag].to_s, fb_user, token, client)
     
-    redirect_to 'http://onboarding.esturisti.co/'+tag+'/thankyou'
+    redirect_to 'http://onboarding.esturisti.co/'+params[:tag].to_s+'/thankyou'
   end
 
 
   def callback_tucupon
-    tag = $tag
-    redir = $redir
-    
     puts "*"*100
     puts "Creando Person desde tucupon..."
-    url = send("#{resource_name}_fb_callback_tucupon_url".to_sym)
     
     client = facebook_client
+
+    url = send("#{resource_name}_fb_callback_tucupon_url".to_sym)
+    url = url + "?tag="+params[:tag].to_s+"&redir="+params[:redir].to_s
 
     client.authorization.process_callback(params[:code], :redirect_uri => url)
 
     token = client.access_token
     fb_user = client.selection.me.info!
     
-    resource = resource_class.create_person_tucupon(tag, fb_user, token, client)
+    resource = resource_class.create_person_tucupon(params[:tag].to_s, fb_user, token, client)
     
-    redirect_to 'http://'+redir
+    redirect_to 'http://'+params[:redir].to_s
   end
 
 end
